@@ -54,13 +54,13 @@
     <Content Include="js-dev\app\services\session.js" />
     <Content Include="js-dev\app\module.js" />
     <Content Include="js-dev\i18n\en\index.html" />
-    <Content Include="js-dev\i18n\form.html" />
+    <Content Include="js-dev\i18n\en\form.html" />
     <Content Include="js-dev\i18n\he\form.html" />
     <Content Include="js-dev\i18n\he\index.html" />
     <Content Include="js-dev\i18n\he\langSelector.html" />
     <Content Include="js-dev\i18n\he\resources.js" />
-    <Content Include="js-dev\i18n\langSelector.html" />
-    <Content Include="js-dev\i18n\resources.js" />
+    <Content Include="js-dev\i18n\en\langSelector.html" />
+    <Content Include="js-dev\i18n\en\resources.js" />
     <Content Include="js-dev\i18n\ru\form.html" />
     <Content Include="js-dev\i18n\ru\index.html" />
     <Content Include="js-dev\i18n\ru\langSelector.html" />
@@ -71,9 +71,9 @@
     <Content Include="js-dev\text.js" />
     <Content Include="js\config.js" />
     <Content Include="js\i18n\en\index.html" />
+    <Content Include="js\i18n\en\resources.js" />
     <Content Include="js\i18n\he\index.html" />
     <Content Include="js\i18n\he\resources.js" />
-    <Content Include="js\i18n\resources.js" />
     <Content Include="js\i18n\ru\index.html" />
     <Content Include="js\i18n\ru\resources.js" />
     <Content Include="js\index.html" />

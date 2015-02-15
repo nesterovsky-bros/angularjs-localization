@@ -1,3 +1,4 @@
+require({"bundles":{"i18n/resources":["i18n/resources","text!i18n/form.html!strip","text!i18n/langSelector.html!strip"]}});
 define(
   'app/module',[
     "angular",
@@ -60,6 +61,7 @@ define(
         }
       ]);
   });
+define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define(
   'app/directives/langSelector',[
     "angular",
@@ -155,4 +157,3 @@ define(
     return angular.bootstrap(document, ["app"]);
   });
 
-require({"bundles":{"i18n/resources":["i18n/resources","text!i18n/form.html!strip","text!i18n/langSelector.html!strip"]}});

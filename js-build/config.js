@@ -40,7 +40,6 @@
   [
     {
       name: "requireLib",
-      include: ["text"]
       //override:
       //{
       //  optimize: "uglify2",
@@ -49,13 +48,6 @@
     },
     {
       name: "config",
-      //include: ["text"],
-      exclude: ["i18n/resources"]
-      //override:
-      //{
-      //  optimize: "uglify2",
-      //  generateSourceMaps: true
-      //}
     },
     {
       name: "i18n/resources",

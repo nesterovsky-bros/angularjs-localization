@@ -21,14 +21,14 @@ function copy(source, deep)
           return target;
         },
         []) :
-    Object.keys(source).reduce(
-      function(target, key)
-      {
-        target[key] = deep ?  copy(source[key], true) : source[key];
+      Object.keys(source).reduce(
+        function(target, key)
+        {
+          target[key] = deep ?  copy(source[key], true) : source[key];
 
-        return target;
-      },
-      {});
+          return target;
+        },
+        {});
 }
 
 function adjustId(id, langID)
@@ -36,7 +36,7 @@ function adjustId(id, langID)
   return id.replace("i18n/", "i18n/" + langID + "/");
 }
 
-config.modules.forEach(
+config.modules = config.modules.filter(
   function(module)
   {
     switch(module.name)
@@ -45,43 +45,58 @@ config.modules.forEach(
       {
         configModule = module;
 
-        break;
+        return false;
       }
       case "i18n/resources":
       {
         resourcesModule = module;
 
-        break;
+        return false;
+      }
+      default:
+      {
+        return true;
       }
     }
   });
 
-langIDs.forEach(
-  function(langID, index)
-  {
-    if (index == 0)
-    {
-      return;
-    }
-
-    var module = copy(resourcesModule, true);
-    var override = module.override || (module.override = {});
-    var path = override.paths || (override.paths = {});
-
-    module.name = adjustId(module.name, langID);
-    module.create = true,
-    path.i18n = "i18n/" + langID
-    config.modules.push(module);
-  });
-
-var bundles = { bundles: { } };
-
-bundles.bundles[resourcesModule.name] = resourcesModule.include;
-
-(configModule.override || (configModule.override = {})).wrap =
+if (resourcesModule && configModule)
 {
-  end: "require(" + JSON.stringify(bundles) + ");"
-};
+  var defaultResource;
+
+  langIDs.forEach(
+    function(langID)
+    {
+      var module = copy(resourcesModule, true);
+      var override = module.override || (module.override = {});
+      var path = override.paths || (override.paths = {});
+
+      defaultResource || (defaultResource = module);
+
+      module.name = adjustId(module.name, langID);
+      module.create = true,
+      path.i18n = "i18n/" + langID
+      config.modules.push(module);
+    });
+
+  var bundles = { bundles: {} };
+
+  bundles.bundles[resourcesModule.name] = resourcesModule.include;
+
+  var configOverride = configModule.override || (configModule.override = {});
+  var configPath = configOverride.paths || (configOverride.paths = {});
+
+  configOverride.wrap = { start: "require(" + JSON.stringify(bundles) + ");\n" };
+  
+  if (defaultResource)
+  {
+    configPath.i18n = defaultResource.override.paths.i18n;
+    configModule.exclude || (configModule.exclude = []);
+    configModule.exclude.push(defaultResource.name);
+  }
+
+  config.modules.push(configModule);
+}
 
 requirejs.optimize(
   config,

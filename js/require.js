@@ -2077,4 +2077,3 @@ var requirejs, require, define;
 
 define("requireLib", function(){});
 
-define('text',{});

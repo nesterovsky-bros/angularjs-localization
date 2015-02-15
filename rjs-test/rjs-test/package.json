@@ -1,0 +1,10 @@
+{
+  "name": "rjs-test",
+  "version": "0.0.0",
+  "description": "rjs-test",
+  "main": "app.js",
+  "author": {
+    "name": "vladimirn",
+    "email": ""
+  }
+}

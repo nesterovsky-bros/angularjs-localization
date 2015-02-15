@@ -1,30 +1,25 @@
 define(
   [
     "./module",
-    "./services/culture",
-    "./services/resources"
+    "./config",
+    "i18n/resources",
+    "./services/session"
   ],
-  function(module)
+  function(module, config, resources)
   {
     module.controller(
       "Application",
       [
-        "culture", "resources",
-        function(culture, resources)
+        "session",
+        function(session)
         {
-          this.culture = culture;
-          this.name = null;
-          this.address = null;
-          this.phone = null;
-          this.email = null;
+          this.langIDs = config.langIDs;
+          this.langID = "en";
+          this.state = session.application || (session.application = {});
 
           this.action = function()
           {
-            resources("app/resources/{langID}").then(
-              function(resource)
-              {
-                alert(resource.done);
-              });
+            alert(resources.done);
           }
         }
       ]);

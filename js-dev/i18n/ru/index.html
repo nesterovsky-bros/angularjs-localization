@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html ng-controller="Application as application" ng-init="application.langID = 'ru'">
+<head>
+  <meta charset="utf-8" />
+  <title>Test</title>
+  <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+  <style type="text/css">.ng-cloak { display: none; }
+  </style>
+</head>
+<body>
+  <div lang-selector lang-id="application.langID" lang-ids="application.langIDs"></div>
+  <hr />
+
+  <my-form 
+    name="application.state.name"
+    address="application.state.address"
+    phone="application.state.phone"
+    email="application.state.email"
+    on-action="application.action()"></my-form>
+
+  <script>var require = { paths: { i18n: "i18n/ru" } };</script>
+  <script data-main="../../config" src="../../require.js"></script>
+</body>
+</html>

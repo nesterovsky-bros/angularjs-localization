@@ -44,29 +44,41 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="js-build\config.js" />
     <Content Include="js-build\build.js" />
     <Content Include="js-build\r.js" />
-    <Content Include="js-dev\app\form\he.html" />
-    <Content Include="js-dev\app\form\ru.html" />
-    <Content Include="js-dev\app\form\en.html" />
+    <Content Include="js-dev\app\config.js" />
+    <Content Include="js-dev\app\directives\langSelector.js" />
+    <Content Include="js-dev\app\directives\myForm.js" />
     <Content Include="js-dev\app\application.js" />
-    <Content Include="js-dev\app\resources\ru.js" />
-    <Content Include="js-dev\app\resources\he.js" />
-    <Content Include="js-dev\app\resources\en.js" />
-    <Content Include="js-dev\app\services\resources.js" />
-    <Content Include="js-dev\app\services\template-request.js" />
+    <Content Include="js-dev\app\services\session.js" />
     <Content Include="js-dev\app\module.js" />
-    <Content Include="js-dev\app\services\culture.js" />
+    <Content Include="js-dev\i18n\en\index.html" />
+    <Content Include="js-dev\i18n\form.html" />
+    <Content Include="js-dev\i18n\he\form.html" />
+    <Content Include="js-dev\i18n\he\index.html" />
+    <Content Include="js-dev\i18n\he\langSelector.html" />
+    <Content Include="js-dev\i18n\he\resources.js" />
+    <Content Include="js-dev\i18n\langSelector.html" />
+    <Content Include="js-dev\i18n\resources.js" />
+    <Content Include="js-dev\i18n\ru\form.html" />
+    <Content Include="js-dev\i18n\ru\index.html" />
+    <Content Include="js-dev\i18n\ru\langSelector.html" />
+    <Content Include="js-dev\i18n\ru\resources.js" />
     <Content Include="js-dev\index.html" />
     <Content Include="js-dev\config.js" />
     <Content Include="js-dev\require.js" />
     <Content Include="js-dev\text.js" />
-    <Content Include="js\app\resources\en.js" />
-    <Content Include="js\app\resources\he.js" />
-    <Content Include="js\app\resources\ru.js" />
     <Content Include="js\config.js" />
+    <Content Include="js\i18n\en\index.html" />
+    <Content Include="js\i18n\he\index.html" />
+    <Content Include="js\i18n\he\resources.js" />
+    <Content Include="js\i18n\resources.js" />
+    <Content Include="js\i18n\ru\index.html" />
+    <Content Include="js\i18n\ru\resources.js" />
     <Content Include="js\index.html" />
     <Content Include="js\require.js" />
+    <Content Include="localization.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

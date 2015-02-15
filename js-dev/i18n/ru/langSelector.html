@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Language selector</title>
+  <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+</head>
+<body>
+  <div class="btn-group" dropdown>
+    <button type="button"
+      class="btn btn-small dropdown-toggle" 
+      dropdown-toggle
+      ng-bind="langId">
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li ng-repeat="langID in langIds">
+        <a ng-href="../{{langID}}/index.html">{{langID}}</a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

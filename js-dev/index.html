@@ -1,27 +1,9 @@
 ﻿<!DOCTYPE html>
-<html ng-controller="Application as application">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>Test</title>
-  <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-  <style type="text/css">.ng-cloak { display: none; }
-  </style>
+  <meta http-equiv="refresh" content="0; url=i18n/en/index.html" />
+  <title></title>
 </head>
 <body>
-  <div class="btn-group" dropdown>
-    <button type="button"
-            class="btn btn-small dropdown-toggle" dropdown-toggle
-            ng-bind="application.culture.langID"></button>
-    <ul class="dropdown-menu" role="menu">
-      <li ng-repeat="langID in application.culture.langIDs">
-        <a ng-click="application.culture.langID = langID">{{langID}}</a>
-      </li>
-    </ul>
-  </div>
-  <hr />
-
-  <div ng-include="'app/form/' + application.culture.langID + '.html'"></div>
-
-  <script data-main="config" src="require.js"></script>
 </body>
 </html>

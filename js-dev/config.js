@@ -13,46 +13,25 @@ require(
   {
     angular: { exports: "angular" },
     "angular-ui-bootstrap": ["angular"],
+  },
+
+  config:
+  {
+    "app/config":
+    {
+      langIDs: ["en", "ru", "he"]
+    }
   }
 });
 
-require(
-// 2. Build override.
-{
-  bundles:
-  {
-    "app/resources/en":
-    [
-      "app/resources/en",
-      "text!app/form/en.html!strip",
-    ],
-    "app/resources/ru":
-    [
-      "app/resources/ru",
-      "text!app/form/ru.html!strip",
-    ],
-    "app/resources/he":
-    [
-      "app/resources/he",
-      "text!app/form/he.html!strip",
-    ]
-  }
-}
-
-//>>excludeStart("build", pragmas.build);
-&&
-// 3. Development override.
-{
-}
-//>>excludeEnd("build");
-);
-
-require(
+define(
   [
     "angular",
+    "i18n/resources",
     "app/module",
     "app/application",
-    "app/services/template-request",
+    "app/directives/langSelector",
+    "app/directives/myForm"
   ],
   function(angular)
   {

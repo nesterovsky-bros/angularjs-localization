@@ -7,111 +7,114 @@ define(
   {
     return angular.module("app", ["ui.bootstrap"]);
   });
+define('app/config',["module"], function(module) { return module.config(); });
 define(
-  'app/services/culture',["../module"],
-  function(module)
-  {
-    
-
-    module.service(
-      "culture",
-      function()
-      {
-        this.langIDs = ["en", "ru", "he"];
-        this.langID = "en";
-      });
-  });
-
-define(
-  'app/services/resources',[
-    "../module",
-    "./culture"
+  'app/services/session',[
+    "angular",
+    "../module"
   ],
-  function(module)
+  function(angular, module)
   {
-    module.service(
-      "resources", 
-      [
-        "$q", "culture",
-        function($q, culture)
-        {
-          return function(id, ignoreRequestError)
-          {
-            return $q(function(resolve, reject)
-            {
-              var url = id.replace("{langID}", culture.langID);
+    module.factory(
+      "session",
+      ["$window", function($window)
+      {
+        var session =
+          angular.fromJson($window.sessionStorage.getItem(module.name)) || {};
 
-              require(
-                [url],
-                function(resource) { resolve(resource); },
-                ignoreRequestError ?
-                  reject :
-                  function() { throw 'Failed to load: ' + url; });
-            });
-          };
-        }
-      ]);
+        $window.addEventListener(
+          "beforeunload",
+          function()
+          {
+            $window.sessionStorage.setItem(
+              module.name,
+              angular.toJson(session));
+          })
+
+        return session;
+      }]);
   });
 define(
   'app/application',[
     "./module",
-    "./services/culture",
-    "./services/resources"
+    "./config",
+    "i18n/resources",
+    "./services/session"
   ],
-  function(module)
+  function(module, config, resources)
   {
     module.controller(
       "Application",
       [
-        "culture", "resources",
-        function(culture, resources)
+        "session",
+        function(session)
         {
-          this.culture = culture;
-          this.name = null;
-          this.address = null;
-          this.phone = null;
-          this.email = null;
+          this.langIDs = config.langIDs;
+          this.langID = "en";
+          this.state = session.application || (session.application = {});
 
           this.action = function()
           {
-            resources("app/resources/{langID}").then(
-              function(resource)
-              {
-                alert(resource.done);
-              });
+            alert(resources.done);
           }
         }
       ]);
   });
 define(
-  'app/services/template-request',[
+  'app/directives/langSelector',[
+    "angular",
     "../module",
-    "./resources"
+    "text!i18n/langSelector.html!strip"
   ],
-  function(module)
+  function(angular, module, template)
   {
-    module.config(
-    [
-      "$provide",
-      function($provide)
+    
+
+    module.directive(
+      "langSelector",
+      function()
       {
-        $provide.decorator(
-          "$templateRequest",
-          [
-            "$delegate", "resources",
-            function($delegate, resources)
-            {
-              return function handleRequestFn(tpl, ignoreRequestError)
-              {
-                return tpl.lastIndexOf("app/", 0) !== 0 ?
-                  $delegate(tpl, ignoreRequestError) :
-                  resources("text!" + tpl + "!strip", ignoreRequestError);
-              };
-            }
-          ]);
-      }
-    ])
+        return {
+          restrict: 'A',
+          scope:
+          {
+            langId: "=",
+            langIds: "="
+          },
+          template: template
+        };
+      });
   });
+
+define(
+  'app/directives/myForm',[
+    "angular",
+    "../module",
+    "text!i18n/form.html!strip"
+  ],
+  function(angular, module, template)
+  {
+    
+
+    module.directive(
+      "myForm",
+      function()
+      {
+        return {
+          restrict: 'E',
+          scope:
+          {
+            name: "=",
+            address: "=",
+            phone: "=",
+            email: "=",
+            onAction: "&",
+          },
+          template: template
+        };
+      });
+  });
+
 // 1. Build config.
 require(
 {
@@ -127,46 +130,29 @@ require(
   {
     angular: { exports: "angular" },
     "angular-ui-bootstrap": ["angular"],
+  },
+
+  config:
+  {
+    "app/config":
+    {
+      langIDs: ["en", "ru", "he"]
+    }
   }
 });
 
-require(
-// 2. Build override.
-{
-  bundles:
-  {
-    "app/resources/en":
-    [
-      "app/resources/en",
-      "text!app/form/en.html!strip",
-    ],
-    "app/resources/ru":
-    [
-      "app/resources/ru",
-      "text!app/form/ru.html!strip",
-    ],
-    "app/resources/he":
-    [
-      "app/resources/he",
-      "text!app/form/he.html!strip",
-    ]
-  }
-}
-
-);
-
-require(
-  [
+define(
+  'config',[
     "angular",
+    "i18n/resources",
     "app/module",
     "app/application",
-    "app/services/template-request",
+    "app/directives/langSelector",
+    "app/directives/myForm"
   ],
   function(angular)
   {
     return angular.bootstrap(document, ["app"]);
   });
 
-define("config", function(){});
-
-define('text',{});
+require({"bundles":{"i18n/resources":["i18n/resources","text!i18n/form.html!strip","text!i18n/langSelector.html!strip"]}});

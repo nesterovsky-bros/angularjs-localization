@@ -1,85 +1,97 @@
-﻿({
-  baseUrl: "../js-dev",
-  dir: "../js",
-  mainConfigFile: "../js-dev/config.js",
+﻿var requirejs = require("./r.js");
+var config = require("./config.js");
 
-  paths:
+var configModule;
+var resourcesModule;
+var langIDs = config.config.langIDs;
+
+function copy(source, deep)
+{
+  return (typeof source !== "object") ||
+    (source == null) ||
+    (source instanceof RegExp) ||
+    (source instanceof Function) ? 
+      source :
+    Array.isArray(source) ?
+      source.reduce(
+        function(target, value)
+        {
+          target.push(deep ?  copy(value, true) : value);
+
+          return target;
+        },
+        []) :
+    Object.keys(source).reduce(
+      function(target, key)
+      {
+        target[key] = deep ?  copy(source[key], true) : source[key];
+
+        return target;
+      },
+      {});
+}
+
+function adjustId(id, langID)
+{
+  return id.replace("i18n/", "i18n/" + langID + "/");
+}
+
+config.modules.forEach(
+  function(module)
   {
-    requireLib: "require",
-    angular: "empty:",
-    "angular-ui-bootstrap": "empty:"
-  },
+    switch(module.name)
+    {
+      case "config":
+      {
+        configModule = module;
 
-  pragmas:
-  {
-    build: true
-  },
+        break;
+      }
+      case "i18n/resources":
+      {
+        resourcesModule = module;
 
-  optimize: "none",
-  skipDirOptimize: true,
-  preserveLicenseComments: false,
-
-  //uglify2:
-  //{
-  //  output:
-  //  {
-  //    max_line_length: 10000
-  //  }
-  //},
-  
-  inlineText: true,
-  //useStrict: true,
-
-  stubModules: [ "text" ],
-  optimizeAllPluginResources: true,
-  findNestedDependencies: true,
-  removeCombined: true,
-  
-  modules:
-  [
-    {
-      name: "requireLib",
-      //override:
-      //{
-      //  optimize: "uglify2",
-      //  generateSourceMaps: true
-      //}
-    },
-    {
-      name: "app/resources/en",
-      exclude: ["text"],
-      include:
-      [
-        "app/resources/en",
-        "text!app/form/en.html!strip",
-      ],
-    },
-    {
-      name: "app/resources/ru",
-      exclude: ["text"],
-      include:
-      [
-        "app/resources/ru",
-        "text!app/form/ru.html!strip",
-      ],
-    },
-    {
-      name: "app/resources/he",
-      exclude: ["text"],
-      include:
-      [
-        "app/resources/he",
-        "text!app/form/he.html!strip",
-      ],
-    },
-    {
-      name: "config",
-      include: ["text"]
-      //override:
-      //{
-      //  optimize: "uglify2",
-      //  generateSourceMaps: true
-      //}
+        break;
+      }
     }
-  ]
-})
+  });
+
+langIDs.forEach(
+  function(langID, index)
+  {
+    if (index == 0)
+    {
+      return;
+    }
+
+    var module = copy(resourcesModule, true);
+    var override = module.override || (module.override = {});
+    var path = override.paths || (override.paths = {});
+
+    module.name = adjustId(module.name, langID);
+    module.create = true,
+    path.i18n = "i18n/" + langID
+    config.modules.push(module);
+  });
+
+var bundles = { bundles: { } };
+
+bundles.bundles[resourcesModule.name] = resourcesModule.include;
+
+(configModule.override || (configModule.override = {})).wrap =
+{
+  end: "require(" + JSON.stringify(bundles) + ");"
+};
+
+requirejs.optimize(
+  config,
+  function(buildResponse)
+  {
+    console.log(buildResponse);
+  },
+  function(err)
+  {
+    console.log(err);
+  });
+
+

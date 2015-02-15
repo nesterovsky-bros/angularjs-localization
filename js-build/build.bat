@@ -1,1 +1,1 @@
-node r.js -o build.js
+node build.js
